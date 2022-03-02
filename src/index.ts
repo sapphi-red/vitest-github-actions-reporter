@@ -3,8 +3,22 @@ import { startGroup, endGroup, error } from '@actions/core'
 
 type Vitest = Parameters<Exclude<Reporter['onInit'], undefined>>[0]
 
+export type GitHubActionsReporterOptions = {
+  /**
+   * @default false
+   */
+  hideStackTrace?: boolean
+}
+
 export default class GitHubActionsReporter implements Reporter {
   ctx!: Vitest
+  options: Required<GitHubActionsReporterOptions>
+
+  constructor({ hideStackTrace = false }: GitHubActionsReporterOptions = {}) {
+    this.options = {
+      hideStackTrace
+    }
+  }
 
   onInit(ctx: Vitest) {
     this.ctx = ctx
@@ -41,7 +55,12 @@ export default class GitHubActionsReporter implements Reporter {
   private reportSuiteError(filename: string, suite: Suite) {
     const position = this.getPositionFromError(filename, suite.result?.error)
 
-    error(suite.result?.error?.stackStr ?? 'No stack trace', {
+    const stackTrace = suite.result?.error?.stackStr ?? 'No stack trace'
+    const message = this.options.hideStackTrace
+      ? 'stack trace hidden'
+      : stackTrace
+
+    error(message, {
       ...position,
       title: this.getErrorTitle(suite.result?.error, 'Failed Suite')
     })
@@ -52,7 +71,12 @@ export default class GitHubActionsReporter implements Reporter {
 
     const position = this.getPositionFromError(filename, test.result?.error)
 
-    error(test.result.error?.stackStr ?? 'No stack trace', {
+    const stackTrace = test.result?.error?.stackStr ?? 'No stack trace'
+    const message = this.options.hideStackTrace
+      ? 'stack trace hidden'
+      : stackTrace
+
+    error(message, {
       ...position,
       title: this.getErrorTitle(test.result?.error, 'Failed Test')
     })
