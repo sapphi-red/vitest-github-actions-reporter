@@ -1,5 +1,5 @@
 import type { ErrorWithDiff, File, Reporter, Suite, Task, Test } from 'vitest'
-import { issue, issueCommand } from '@actions/core/lib/command'
+import { startGroup, endGroup, error } from '@actions/core'
 
 type Vitest = Parameters<Exclude<Reporter['onInit'], undefined>>[0]
 
@@ -13,9 +13,9 @@ export default class GitHubActionsReporter implements Reporter {
   async onFinished(files?: File[]) {
     if (!files) return
 
-    issue('group', 'Vitest Annotations')
+    startGroup('Vitest Annotations')
     this.reportFiles(files)
-    issue('endgroup')
+    endGroup()
   }
 
   private reportFiles(files: File[]) {
@@ -41,14 +41,10 @@ export default class GitHubActionsReporter implements Reporter {
   private reportSuiteError(filename: string, suite: Suite) {
     const position = this.getPositionFromError(filename, suite.result?.error)
 
-    issueCommand(
-      'error',
-      {
-        ...position,
-        title: this.getErrorTitle(suite.result?.error, 'Failed Suite')
-      },
-      suite.result?.error?.stackStr
-    )
+    error(suite.result?.error?.stackStr ?? 'No stack trace', {
+      ...position,
+      title: this.getErrorTitle(suite.result?.error, 'Failed Suite')
+    })
   }
 
   private reportTest(filename: string, test: Test) {
@@ -56,14 +52,10 @@ export default class GitHubActionsReporter implements Reporter {
 
     const position = this.getPositionFromError(filename, test.result?.error)
 
-    issueCommand(
-      'error',
-      {
-        ...position,
-        title: this.getErrorTitle(test.result?.error, 'Failed Test')
-      },
-      test.result.error?.stackStr
-    )
+    error(test.result.error?.stackStr ?? 'No stack trace', {
+      ...position,
+      title: this.getErrorTitle(test.result?.error, 'Failed Test')
+    })
   }
 
   private getPositionFromError(filename: string, error?: ErrorWithDiff) {
