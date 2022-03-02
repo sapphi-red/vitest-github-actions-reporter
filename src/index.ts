@@ -56,9 +56,7 @@ export default class GitHubActionsReporter implements Reporter {
     const position = this.getPositionFromError(filename, suite.result?.error)
 
     const stackTrace = suite.result?.error?.stackStr ?? 'No stack trace'
-    const message = this.options.hideStackTrace
-      ? 'stack trace hidden'
-      : stackTrace
+    const message = this.options.hideStackTrace ? '' : stackTrace
 
     error(message, {
       ...position,
@@ -72,9 +70,7 @@ export default class GitHubActionsReporter implements Reporter {
     const position = this.getPositionFromError(filename, test.result?.error)
 
     const stackTrace = test.result?.error?.stackStr ?? 'No stack trace'
-    const message = this.options.hideStackTrace
-      ? 'stack trace hidden'
-      : stackTrace
+    const message = this.options.hideStackTrace ? '' : stackTrace
 
     error(message, {
       ...position,
