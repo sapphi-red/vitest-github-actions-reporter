@@ -1,0 +1,47 @@
+{
+  "name": "vitest-github-actions-reporter",
+  "version": "0.1.0",
+  "description": "Vitest reporter to create annotations when running tests in GitHub Actions",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sapphi-red/vitest-github-actions-reporter.git"
+  },
+  "keywords": [
+    "vitest",
+    "vitest-reporter"
+  ],
+  "author": "sapphi-red",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sapphi-red/vitest-github-actions-reporter/issues"
+  },
+  "homepage": "https://github.com/sapphi-red/vitest-github-actions-reporter#readme",
+  "peerDependencies": {
+    "vitest": "^0.5.9"
+  },
+  "devDependencies": {
+    "tsup": "^5.11.13",
+    "typescript": "^4.6.2",
+    "vitest": "^0.5.9"
+  }
+}
