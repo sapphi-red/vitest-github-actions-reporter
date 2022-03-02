@@ -74,7 +74,7 @@ export default class GitHubActionsReporter implements Reporter {
       return { file: filename }
     }
 
-    const [file, line, col] = m
+    const [, file, line, col] = m
     return { file: file ?? filename, line, col }
   }
 
