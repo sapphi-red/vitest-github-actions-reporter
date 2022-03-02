@@ -1,5 +1,10 @@
 import type { ErrorWithDiff, File, Reporter, Suite, Task, Test } from 'vitest'
-import { startGroup, endGroup, error } from '@actions/core'
+import {
+  startGroup,
+  endGroup,
+  error,
+  type AnnotationProperties
+} from '@actions/core'
 
 type Vitest = Parameters<Exclude<Reporter['onInit'], undefined>>[0]
 
@@ -78,7 +83,10 @@ export default class GitHubActionsReporter implements Reporter {
     })
   }
 
-  private getPositionFromError(filename: string, error?: ErrorWithDiff) {
+  private getPositionFromError(
+    filename: string,
+    error?: ErrorWithDiff
+  ): AnnotationProperties {
     const stack = error?.stack ?? ''
 
     const m = stack.match(/at (.+):(\d)+:(\d)+(?:\n|$)/)
@@ -86,8 +94,12 @@ export default class GitHubActionsReporter implements Reporter {
       return { file: filename }
     }
 
-    const [, file, line, col] = m
-    return { file: file ?? filename, line, col }
+    const [, file, startLine, startColumn] = m
+    return {
+      file: file ?? filename,
+      startLine: startLine ? +startLine : undefined,
+      startColumn: startColumn ? +startColumn : undefined
+    }
   }
 
   private getErrorTitle(error: ErrorWithDiff | undefined, fallback: string) {
