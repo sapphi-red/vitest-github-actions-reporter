@@ -4,6 +4,8 @@
 
 Vitest reporter to create annotations when running tests in GitHub Actions.
 
+![image](https://user-images.githubusercontent.com/49056869/156347529-9e415f14-d530-4d7d-ae2f-720621f861bf.png)
+
 Thanks to [`jest-github-actions-reporter`](https://github.com/cschleiden/jest-github-actions-reporter) for ideas.
 
 ## Install
