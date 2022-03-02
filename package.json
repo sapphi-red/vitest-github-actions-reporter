@@ -43,6 +43,7 @@
     "vitest": "^0.5.9"
   },
   "devDependencies": {
+    "@actions/core": "^1.6.0",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "eslint": "^8.10.0",

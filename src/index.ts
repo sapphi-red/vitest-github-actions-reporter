@@ -1,5 +1,5 @@
 import type { ErrorWithDiff, File, Reporter, Suite, Task, Test } from 'vitest'
-import { startGroup, endGroup, outputError } from './actions'
+import { issue, issueCommand } from '@actions/core/lib/command'
 
 type Vitest = Parameters<Exclude<Reporter['onInit'], undefined>>[0]
 
@@ -13,9 +13,9 @@ export default class GitHubActionsReporter implements Reporter {
   async onFinished(files?: File[]) {
     if (!files) return
 
-    this.ctx.log(startGroup('Vitest Annotations'))
+    issue('group', 'Vitest Annotations')
     this.reportFiles(files)
-    this.ctx.log(endGroup())
+    issue('endgroup')
   }
 
   private reportFiles(files: File[]) {
@@ -41,14 +41,14 @@ export default class GitHubActionsReporter implements Reporter {
   private reportSuiteError(filename: string, suite: Suite) {
     const position = this.getPositionFromError(filename, suite.result?.error)
 
-    const text = outputError(
+    issueCommand(
+      'error',
       {
         ...position,
         title: this.getErrorTitle(suite.result?.error, 'Failed Suite')
       },
       suite.result?.error?.stackStr
     )
-    this.ctx.log(text)
   }
 
   private reportTest(filename: string, test: Test) {
@@ -56,14 +56,14 @@ export default class GitHubActionsReporter implements Reporter {
 
     const position = this.getPositionFromError(filename, test.result?.error)
 
-    const text = outputError(
+    issueCommand(
+      'error',
       {
         ...position,
         title: this.getErrorTitle(test.result?.error, 'Failed Test')
       },
       test.result.error?.stackStr
     )
-    this.ctx.log(text)
   }
 
   private getPositionFromError(filename: string, error?: ErrorWithDiff) {
