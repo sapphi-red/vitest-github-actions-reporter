@@ -27,3 +27,10 @@ export default {
 ```
 Then run `vitest` with GitHub Actions.
 That's all. GitHub Actions will do everything other.
+
+## Options
+### `hideStackTrace`
+
+Hides stack trace in message.
+
+![image](https://user-images.githubusercontent.com/49056869/156354039-750a6194-eb76-4adb-bbd6-7c2b65ec80a4.png)
