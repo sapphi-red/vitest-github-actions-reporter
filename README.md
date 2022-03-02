@@ -23,3 +23,5 @@ export default {
   }
 }
 ```
+Then run `vitest` with GitHub Actions.
+That's all. GitHub Actions will do everything other.
