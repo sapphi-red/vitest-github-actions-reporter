@@ -39,6 +39,9 @@ export default class GitHubActionsReporter implements Reporter {
 
   private reportFiles(files: File[]) {
     for (const file of files) {
+      if (file.result?.error) {
+        this.reportSuiteError(file.filepath, file)
+      }
       this.reportTasks(file.filepath, file.tasks)
     }
   }
