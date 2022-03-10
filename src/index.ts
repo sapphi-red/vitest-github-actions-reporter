@@ -1,12 +1,18 @@
-import type { ErrorWithDiff, File, Reporter, Suite, Task, Test } from 'vitest'
+import type {
+  ErrorWithDiff,
+  File,
+  Reporter,
+  Suite,
+  Task,
+  Test,
+  Vitest
+} from 'vitest'
 import {
   startGroup,
   endGroup,
   error,
   type AnnotationProperties
 } from '@actions/core'
-
-type Vitest = Parameters<Exclude<Reporter['onInit'], undefined>>[0]
 
 export type GitHubActionsReporterOptions = {
   /**
