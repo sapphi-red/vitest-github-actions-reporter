@@ -4,7 +4,7 @@
 
 Vitest reporter to create annotations when running tests in GitHub Actions.
 
-![image](https://user-images.githubusercontent.com/49056869/156349772-832e6536-e781-491b-8d5b-b3b3077aa7ce.png)
+![image](https://user-images.githubusercontent.com/49056869/162130129-137511a1-9df4-4431-af88-5626d66f587a.png)
 
 Thanks to [`jest-github-actions-reporter`](https://github.com/cschleiden/jest-github-actions-reporter) for ideas.
 
@@ -29,8 +29,14 @@ Then run `vitest` with GitHub Actions.
 That's all. GitHub Actions will do everything other.
 
 ## Options
+### `trimRepositoryPrefix`
+*Default: `true`*  
+Trims `/home/runner/{repository name}` / `D:\a\{repository name}` in stacktrace.
+The image below is a preview when it is `false`.
+![image](https://user-images.githubusercontent.com/49056869/162126739-a3daf5a2-ff37-46c5-b128-bb890fbcf05a.png)
+
 ### `hideStackTrace`
-
-Hides stack trace in message.
-
+*Default: `false`*  
+Hides stacktrace in message.
+The image below is a preview when it is `true`.
 ![image](https://user-images.githubusercontent.com/49056869/156354039-750a6194-eb76-4adb-bbd6-7c2b65ec80a4.png)
