@@ -2,7 +2,7 @@ import type { ParsedStack } from 'vitest'
 
 const repository = process.env.GITHUB_REPOSITORY?.split('/')[1] ?? ''
 
-const prefixes = [`D:\\a\\${repository}\\`, `/home/runner/${repository}/`]
+const prefixes = [`D:/a/${repository}/`, `/home/runner/${repository}/`]
 
 export const stringifyStacktrace = (
   stack: ParsedStack[],
