@@ -1,6 +1,7 @@
 import type {
   ErrorWithDiff,
   File,
+  ParsedStack,
   Reporter,
   Suite,
   Task,
@@ -13,8 +14,14 @@ import {
   error,
   type AnnotationProperties
 } from '@actions/core'
+import { parseStacktrace } from './stacktrace/parse'
+import { stringifyStacktrace } from './stacktrace/stringify'
 
 export type GitHubActionsReporterOptions = {
+  /**
+   * @default true
+   */
+  trimRepositoryPrefix?: boolean
   /**
    * @default false
    */
@@ -25,8 +32,12 @@ export default class GitHubActionsReporter implements Reporter {
   ctx!: Vitest
   options: Required<GitHubActionsReporterOptions>
 
-  constructor({ hideStackTrace = false }: GitHubActionsReporterOptions = {}) {
+  constructor({
+    trimRepositoryPrefix = true,
+    hideStackTrace = false
+  }: GitHubActionsReporterOptions = {}) {
     this.options = {
+      trimRepositoryPrefix,
       hideStackTrace
     }
   }
@@ -67,10 +78,9 @@ export default class GitHubActionsReporter implements Reporter {
   }
 
   private reportSuiteError(filename: string, suite: Suite) {
-    const position = this.getPositionFromError(filename, suite.result?.error)
-
-    const stackTrace = suite.result?.error?.stackStr ?? 'No stack trace'
-    const message = this.options.hideStackTrace ? '.' : stackTrace
+    const stackTrace = this.parseStacktrace(suite.result?.error?.stackStr)
+    const position = this.getPositionFromError(filename, stackTrace)
+    const message = this.createMessage(stackTrace)
 
     error(message, {
       ...position,
@@ -81,10 +91,9 @@ export default class GitHubActionsReporter implements Reporter {
   private reportTest(filename: string, test: Test) {
     if (test.result?.state !== 'fail') return
 
-    const position = this.getPositionFromError(filename, test.result?.error)
-
-    const stackTrace = test.result?.error?.stackStr ?? 'No stack trace'
-    const message = this.options.hideStackTrace ? '.' : stackTrace
+    const stackTrace = this.parseStacktrace(test.result?.error?.stackStr)
+    const position = this.getPositionFromError(filename, stackTrace)
+    const message = this.createMessage(stackTrace)
 
     error(message, {
       ...position,
@@ -92,22 +101,31 @@ export default class GitHubActionsReporter implements Reporter {
     })
   }
 
+  private parseStacktrace(stacktraceStr: string | undefined) {
+    if (!stacktraceStr) return undefined
+    return parseStacktrace(stacktraceStr)
+  }
+
+  private createMessage(stacktrace: ParsedStack[] | undefined) {
+    if (this.options.hideStackTrace) return '.'
+
+    if (!stacktrace) return 'No stacktrace'
+    return stringifyStacktrace(stacktrace, this.options.trimRepositoryPrefix)
+  }
+
   private getPositionFromError(
     filename: string,
-    error?: ErrorWithDiff
+    stacktrace?: ParsedStack[]
   ): AnnotationProperties {
-    const stack = error?.stack ?? ''
-
-    const m = stack.match(/at (.+):(\d)+:(\d)+(?:\n|$)/)
-    if (!m) {
+    if (!stacktrace || !stacktrace[0]) {
       return { file: filename }
     }
 
-    const [, file, startLine, startColumn] = m
+    const { file, line, column } = stacktrace[0]
     return {
-      file: file ?? filename,
-      startLine: startLine ? +startLine : undefined,
-      startColumn: startColumn ? +startColumn : undefined
+      file: file,
+      startLine: line,
+      startColumn: column
     }
   }
 

@@ -5,8 +5,6 @@ import GitHubActionsReporter from '../../src/index'
 
 export default defineConfig({
   test: {
-    reporters: new GitHubActionsReporter({
-      hideStackTrace: true
-    })
+    reporters: new GitHubActionsReporter()
   }
 })
