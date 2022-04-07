@@ -1,8 +1,6 @@
 import type { ParsedStack } from 'vitest'
 
-const repository = process.env.GITHUB_REPOSITORY?.split('/')[1] ?? ''
-
-const prefixes = [`D:/a/${repository}/`, `/home/runner/${repository}/`]
+const repositoryPrefixes = [`D:/a/`, `/home/runner/`]
 
 export const stringifyStacktrace = (
   stack: ParsedStack[],
@@ -12,7 +10,7 @@ export const stringifyStacktrace = (
     .map(s => {
       let file = s.file
       if (trimRepositoryPrefix) {
-        file = trimPrefixes(file, prefixes)
+        file = trimPrefixes(file, repositoryPrefixes)
       }
 
       return `  at ${s.method ? `${s.method} ` : ''}${file}:${s.line}:${
