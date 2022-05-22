@@ -13,7 +13,12 @@ const formatMessage = (message: string) => {
   for (const dir of escapedCurrentDirs) {
     message = message.replaceAll(dir, '')
   }
-  return message.replace(/\r\n/g, '\n').split('\n').sort()
+  const messsageList = message.replace(/\r\n/g, '\n').split('\n')
+  return [
+    messsageList[0], // start group
+    ...messsageList.slice(1, -1).sort(),
+    messsageList[messsageList.length - 1] // end group
+  ]
 }
 
 it('should output', async () => {
