@@ -1,6 +1,6 @@
 {
   "name": "vitest-github-actions-reporter",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Vitest reporter to create annotations when running tests in GitHub Actions",
   "type": "module",
   "main": "./dist/index.js",
