@@ -16,6 +16,7 @@ import {
 } from '@actions/core'
 import { parseStacktrace } from './stacktrace/parse'
 import { stringifyStacktrace } from './stacktrace/stringify'
+import { SourceMapConsumer } from 'source-map-js'
 
 export type GitHubActionsReporterOptions = {
   /**
@@ -50,36 +51,36 @@ export default class GitHubActionsReporter implements Reporter {
     if (!files) return
 
     startGroup('Vitest Annotations')
-    this.reportFiles(files)
+    await this.reportFiles(files)
     endGroup()
   }
 
-  private reportFiles(files: File[]) {
+  private async reportFiles(files: File[]) {
     for (const file of files) {
       if (file.result?.error) {
-        this.reportSuiteError(file.filepath, file)
+        await this.reportSuiteError(file.filepath, file)
       }
       this.reportTasks(file.filepath, file.tasks)
     }
   }
 
-  private reportTasks(filename: string, tasks: Task[]) {
+  private async reportTasks(filename: string, tasks: Task[]) {
     for (const task of tasks) {
       if (task.type === 'suite') {
         if (task.result?.error) {
-          this.reportSuiteError(filename, task)
+          await this.reportSuiteError(filename, task)
         }
 
         this.reportTasks(filename, task.tasks)
       } else {
-        this.reportTest(filename, task)
+        await this.reportTest(filename, task)
       }
     }
   }
 
-  private reportSuiteError(filename: string, suite: Suite) {
+  private async reportSuiteError(filename: string, suite: Suite) {
     const stackTrace = this.parseStacktrace(suite.result?.error?.stackStr)
-    const position = this.getPositionFromError(filename, stackTrace)
+    const position = await this.getPositionFromError(filename, stackTrace)
     const message = this.createMessage(stackTrace)
 
     error(message, {
@@ -88,11 +89,11 @@ export default class GitHubActionsReporter implements Reporter {
     })
   }
 
-  private reportTest(filename: string, test: Test) {
+  private async reportTest(filename: string, test: Test) {
     if (test.result?.state !== 'fail') return
 
     const stackTrace = this.parseStacktrace(test.result?.error?.stackStr)
-    const position = this.getPositionFromError(filename, stackTrace)
+    const position = await this.getPositionFromError(filename, stackTrace)
     const message = this.createMessage(stackTrace)
 
     error(message, {
@@ -113,19 +114,32 @@ export default class GitHubActionsReporter implements Reporter {
     return stringifyStacktrace(stacktrace, this.options.trimRepositoryPrefix)
   }
 
-  private getPositionFromError(
+  private async getPositionFromError(
     filename: string,
     stacktrace?: ParsedStack[]
-  ): AnnotationProperties {
+  ): Promise<AnnotationProperties> {
     if (!stacktrace || !stacktrace[0]) {
       return { file: filename }
     }
 
     const { file, line, column } = stacktrace[0]
+    const sourcemap = this.ctx.vitenode.fetchCache.get(file)?.result?.map
+    if (!sourcemap) {
+      return {
+        file,
+        startLine: line,
+        startColumn: column
+      }
+    }
+    const consumer = await new SourceMapConsumer(sourcemap)
+    const position = consumer.originalPositionFor({
+      line: line,
+      column: column
+    })
     return {
       file: file,
-      startLine: line,
-      startColumn: column
+      startLine: position.line,
+      startColumn: position.column
     }
   }
 
