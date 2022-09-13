@@ -71,8 +71,13 @@ export default class GitHubActionsReporter implements Reporter {
         }
 
         this.reportTasks(filename, task.tasks)
-      } else {
+      } else if (task.type === 'test') {
         this.reportTest(filename, task)
+      } else if (task.type === 'benchmark') {
+        // TODO
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const _: never = task
       }
     }
   }
