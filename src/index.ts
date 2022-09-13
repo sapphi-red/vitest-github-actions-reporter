@@ -76,8 +76,7 @@ export default class GitHubActionsReporter implements Reporter {
       } else if (task.type === 'benchmark') {
         // TODO
       } else {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const _: never = task
+        checkNever(task)
       }
     }
   }
@@ -138,3 +137,6 @@ export default class GitHubActionsReporter implements Reporter {
     return `${error?.name ?? 'Error'}: ${error?.message ?? fallback}`
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+function checkNever(_: never) {}
