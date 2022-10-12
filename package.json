@@ -45,15 +45,15 @@
   },
   "devDependencies": {
     "@types/node": "^16.11.58",
-    "@typescript-eslint/eslint-plugin": "^5.37.0",
-    "@typescript-eslint/parser": "^5.37.0",
-    "eslint": "^8.23.1",
+    "@typescript-eslint/eslint-plugin": "^5.40.0",
+    "@typescript-eslint/parser": "^5.40.0",
+    "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "execa": "^6.1.0",
     "prettier": "^2.7.1",
     "tsup": "^6.2.3",
-    "typescript": "^4.8.3",
-    "vitest": "^0.23.2"
+    "typescript": "^4.8.4",
+    "vitest": "^0.24.1"
   },
   "dependencies": {
     "@actions/core": "^1.9.1"
