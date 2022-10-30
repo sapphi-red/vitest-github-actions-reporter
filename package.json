@@ -24,7 +24,7 @@
     "type-check": "tsc --noEmit"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=14.16.0"
   },
   "repository": {
     "type": "git",
