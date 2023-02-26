@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/sapphi-red/vitest-github-actions-reporter#readme",
   "peerDependencies": {
-    "vitest": ">=0.16.0"
+    "vitest": ">=0.28.5"
   },
   "devDependencies": {
     "@types/node": "^18.14.1",
