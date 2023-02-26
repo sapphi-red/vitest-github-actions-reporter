@@ -1,6 +1,4 @@
-/// <reference types="vitest" />
-
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import GitHubActionsReporter from '../../src/index'
 
 export default defineConfig({
