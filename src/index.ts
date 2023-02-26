@@ -73,8 +73,8 @@ export default class GitHubActionsReporter implements Reporter {
         this.reportTasks(filename, task.tasks)
       } else if (task.type === 'test') {
         this.reportTest(filename, task)
-      } else if (task.type === 'benchmark') {
-        // TODO
+      } else if (task.type === 'custom') {
+        // TODO: benchmark?
       } else {
         checkNever(task)
       }
