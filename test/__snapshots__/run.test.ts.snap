@@ -5,7 +5,7 @@ exports[`should output 1`] = `
   "::group::Vitest Annotations",
   "::error title=AssertionError%3A expected 9 to be 10 // Object.is equality,file=test/fixtures/test/fail-test.test.ts,line=6,col=17::  at test/fixtures/test/fail-test.test.ts:6:17",
   "::error title=Error%3A error in file,file=test/fixtures/test/fail-file.test.ts,line=3,col=7::  at test/fixtures/test/fail-file.test.ts:3:7",
-  "::error title=Error%3A foo,file=test/fixtures/src/throw.ts,line=2,col=9::  at Module.thrower test/fixtures/src/throw.ts:2:9%0A  at test/fixtures/test/throw.test.ts:5:3",
+  "::error title=Error%3A foo,file=test/fixtures/src/throw.ts,line=2,col=9::  at Module.thrower test/fixtures/src/throw.ts:2:9%0A  at test/fixtures/test/throw.test.ts:6:3",
   "::error title=Error%3A suite error,file=test/fixtures/test/fail-suit.test.ts,line=4,col=9::  at test/fixtures/test/fail-suit.test.ts:4:9",
   "::endgroup::",
 ]
