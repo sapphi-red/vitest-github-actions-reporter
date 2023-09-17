@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /*!
   https://github.com/vitest-dev/vitest/blob/f1cdfb6960a1eb39345f973529bc1e72ab4090b4/packages/vitest/src/utils/source-map.ts#L59-L115
   MIT License
