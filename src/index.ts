@@ -3,10 +3,8 @@ import type {
   File,
   ParsedStack,
   Reporter,
-  Suite,
   Task,
-  Test,
-  Vitest
+  Vitest,
 } from 'vitest'
 import {
   startGroup,
@@ -56,9 +54,7 @@ export default class GitHubActionsReporter implements Reporter {
 
   private reportFiles(files: File[]) {
     for (const file of files) {
-      if (file.result?.error) {
-        this.reportSuiteError(file.filepath, file)
-      }
+      this.reportTaskErrors(file.filepath, file)
       this.reportTasks(file.filepath, file.tasks)
     }
   }
@@ -66,13 +62,11 @@ export default class GitHubActionsReporter implements Reporter {
   private reportTasks(filename: string, tasks: Task[]) {
     for (const task of tasks) {
       if (task.type === 'suite') {
-        if (task.result?.error) {
-          this.reportSuiteError(filename, task)
-        }
+        this.reportTaskErrors(filename, task)
 
         this.reportTasks(filename, task.tasks)
       } else if (task.type === 'test') {
-        this.reportTest(filename, task)
+        this.reportTaskErrors(filename, task)
       } else if (task.type === 'custom') {
         // TODO: benchmark?
       } else {
@@ -81,27 +75,27 @@ export default class GitHubActionsReporter implements Reporter {
     }
   }
 
-  private reportSuiteError(filename: string, suite: Suite) {
-    const stackTrace = this.parseStacktrace(suite.result?.error?.stackStr)
-    const position = this.getPositionFromError(filename, stackTrace)
-    const message = this.createMessage(stackTrace)
-
-    error(message, {
-      ...position,
-      title: this.getErrorTitle(suite.result?.error, 'Failed Suite')
-    })
+  private reportTaskErrors(filename: string, task: Task) {
+    for (const err of task.result?.errors ?? []) {
+      this.reportTaskError(task.type, filename, err)
+    }
   }
 
-  private reportTest(filename: string, test: Test) {
-    if (test.result?.state !== 'fail') return
-
-    const stackTrace = this.parseStacktrace(test.result?.error?.stackStr)
+  private reportTaskError(
+    taskType: 'suite' | 'test' | 'custom',
+    filename: string,
+    err: ErrorWithDiff
+  ) {
+    const stackTrace = this.parseStacktrace(err.stackStr)
     const position = this.getPositionFromError(filename, stackTrace)
     const message = this.createMessage(stackTrace)
 
     error(message, {
       ...position,
-      title: this.getErrorTitle(test.result?.error, 'Failed Test')
+      title: this.getErrorTitle(
+        err,
+        `Failed ${taskType[0]!.toUpperCase()}${taskType.slice(1)}`
+      )
     })
   }
 
