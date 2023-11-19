@@ -4,7 +4,7 @@ import type {
   ParsedStack,
   Reporter,
   Task,
-  Vitest,
+  Vitest
 } from 'vitest'
 import {
   startGroup,
