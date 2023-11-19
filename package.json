@@ -51,7 +51,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-vitest": "^0.3.9",
     "execa": "^8.0.1",
-    "prettier": "^3.0.3",
+    "prettier": "^3.1.0",
     "tsup": "^7.3.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"
