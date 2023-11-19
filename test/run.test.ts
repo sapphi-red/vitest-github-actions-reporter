@@ -1,11 +1,10 @@
 import { execa } from 'execa'
 import { expect, it } from 'vitest'
-import { normalizePath } from 'vite'
 import { fileURLToPath } from 'node:url'
 import { escapeData, escapeProperty } from './utils'
 
 const currentDir = fileURLToPath(new URL('../', import.meta.url))
-const escapedCurrentDirs = [currentDir, normalizePath(currentDir)].flatMap(
+const escapedCurrentDirs = [currentDir, currentDir.replace(/\\/g, '/')].flatMap(
   dir => [escapeData(dir), escapeProperty(dir)]
 )
 
