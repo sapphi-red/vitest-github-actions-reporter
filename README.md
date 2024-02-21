@@ -10,7 +10,7 @@ Vitest reporter to create annotations when running tests in GitHub Actions.
 
 ![image](https://user-images.githubusercontent.com/49056869/162130129-137511a1-9df4-4431-af88-5626d66f587a.png)
 
-Thanks to [`jest-github-actions-reporter`](https://github.com/cschleiden/jest-github-actions-reporter) for ideas.
+Thanks to [`jest-github-actions-reporter`](https://github.com/cschleiden/jest-github-actions-reporter) for the ideas.
 
 ## Install
 
@@ -50,6 +50,6 @@ The image below is a preview when it is `false`.
 ### `hideStackTrace`
 
 _Default: `false`_  
-Hides stacktrace in message.
+Hides stack trace in the message.
 The image below is a preview when it is `true`.
 ![image](https://user-images.githubusercontent.com/49056869/156354039-750a6194-eb76-4adb-bbd6-7c2b65ec80a4.png)
