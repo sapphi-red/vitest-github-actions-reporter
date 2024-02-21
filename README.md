@@ -4,7 +4,7 @@
 
 Vitest reporter to create annotations when running tests in GitHub Actions.
 
-> [!WARNING]
+> [!WARNING]  
 > **[Vitest 1.3.0+](https://github.com/vitest-dev/vitest/releases/tag/v1.3.0) comes with [a builtin support for creating annotations in GitHub Actions](https://vitest.dev/guide/reporters.html#github-actions-reporter).**  
 > This reporter is not needed for those versions.
 
